@@ -27,4 +27,5 @@
 audio.load([
     {key: "theme", src: "audio/theme.wav"},
     {key: "shot", src: "audio/shot.mp3"},
+    {key: "damage", src: "audio/damage.wav"},
 ]);

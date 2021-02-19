@@ -45,7 +45,7 @@ var game = {
     },
     timerBackground: null,
     renderBackground: function(){
-        ctx.drawImage(game.background, 0 - player.x, 0, canvas.width*2, canvas.height);
+        ctx.drawImage(game.background, 0 - player.x, 0 - player.y, canvas.width*2, canvas.height*2);
     },
     timerFuel: null,
     lossFuel: function(){
@@ -153,6 +153,11 @@ var enemy = {
                 this.list.splice(this.list.indexOf(it), 1);
                 // player.healt -= 10 * (it.speed/10);
                 player.healt -= it.speed;
+
+                let damageAudio = audio.get("damage");
+                damageAudio.volume = 0.1;
+                damageAudio.playbackRate = 2.5;
+                damageAudio.play();
             }
         }
     },
@@ -173,7 +178,7 @@ var player = {
     y: canvas.height - (canvas.height / 3),
     velocityx: 0,
     velocityy: 0,
-    states: {left: false, right: false},
+    states: {left: false, right: false, shot: false},
     bullet: [],
     shotTime: 0,
     canShot: true,
@@ -201,7 +206,7 @@ var player = {
                 player.shotTime = 0;
                 player.canShot = true;
             }, 3000);
-            player.y -= 0.05;
+            player.velocityy -= 0.05;
         }
         // Пули летят
         for(let b of this.bullet){
@@ -224,6 +229,11 @@ var player = {
             if(player.velocityx > -0.05 || player.velocityx < 0.05){
                 player.velocityx = 0;
             }
+        }
+        // Противодействие ускорению корабля
+        if( (((!player.states.shot) && player.velocityy > 0) || !player.canShot) ){
+            if(player.y > (canvas.height - (canvas.height / 3))) player.velocityy = 0;
+            else player.velocityy -= 0.05;
         }
         // Движение влево
         if(player.states.left && player.canMove){
@@ -286,10 +296,11 @@ var player = {
         shotAudio.playbackRate = 2.5;
         shotAudio.play();
 
-        player.bullet.push({x: player.x + 12, y: player.y});
-        player.bullet.push({x: player.x + 48, y: player.y});
+        player.bullet.push({x: player.x + 12, y: player.y+24});
+        player.bullet.push({x: player.x + 48, y: player.y+24});
         player.shotTime ++;
-        player.y += 0.05;
+        
+        if(player.y > canvas.height/2) player.velocityy += 0.05;
 
         setTimeout(function(){
             player.shotTime = 0;
@@ -366,9 +377,10 @@ function onKey(e){
             break;
         case "ArrowUp":
             if(e.type == "keydown"){
+                player.states.shot = true;
                 player.shot();
             } else {
-
+                player.states.shot = false;
             }
             break;
     }
