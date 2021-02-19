@@ -9,8 +9,18 @@
 </head>
 <body>
     <div class="window">
+        <div class="statusbar">
+            <h3 id="playerHealt" class="text">Healt: 100</h3>
+            <h3 id="playerScore" class="text">Score: 0</h3>
+        </div>
         <canvas id="viewport" width="300" height="600"></canvas>
     </div>
+
+    <div class="window" id="death">
+        <h1 class="text">GAME OVER</h1>
+    </div>
+    <script src="audio.js"></script>
+    <script src="resources.js"></script>
     <script src="index.js"></script>
 </body>
 </html>

@@ -21,3 +21,18 @@ body{
     justify-content: center;
     flex-direction: column;
 }
+
+.window .statusbar{
+    display: flex;
+}
+
+.window .statusbar>*{margin-right: auto;}
+.window .statusbar>*:last-child{margin-right: 0;}
+
+.window .text{
+    color: #FFF;
+    margin-bottom: 16px;
+}
+
+#death{display: none;}
+#death > .text{user-select: none;}
